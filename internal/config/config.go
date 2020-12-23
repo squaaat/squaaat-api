@@ -41,12 +41,18 @@ func MustInit() {
 	viper.SetConfigType("yaml")
 	viper.ReadConfig(strings.NewReader(value))
 
+	Version = viper.GetString("version")
+	App = newAppConfig()
 	ServerHTTP = newServerHTTPConfig()
+	Sentry = newSentryConfig()
 	ServiceDB = newServiceDBConfig()
 }
 
 var (
+	Version    string
+	App        *AppConfig
 	ServerHTTP *ServerHTTPConfig
+	Sentry     *SentryConfig
 	ServiceDB  *ServiceDBConfig
 )
 
@@ -68,6 +74,23 @@ func newServiceDBConfig() *ServiceDBConfig {
 	}
 }
 
+func newSentryConfig() *SentryConfig {
+	return &SentryConfig{
+		Enabled:      viper.GetBool("env.sentry.enabled"),
+		DSN:          viper.GetString("env.sentry.dsn"),
+		FlushTimeout: viper.GetDuration("env.sentry.flush_timeout"),
+	}
+}
+
+func newAppConfig() *AppConfig {
+	return &AppConfig{
+		Env:     viper.GetString("env.app.env"),
+		Debug:   viper.GetBool("env.app.debug"),
+		Project: viper.GetString("env.app.project"),
+		AppName: viper.GetString("env.app.app_name"),
+	}
+}
+
 type ServerHTTPConfig struct {
 	Port    string
 	Timeout time.Duration
@@ -80,4 +103,17 @@ type ServiceDBConfig struct {
 	Schema   string
 	Username string
 	Password string
+}
+
+type SentryConfig struct {
+	Enabled      bool
+	DSN          string
+	FlushTimeout time.Duration
+}
+
+type AppConfig struct {
+	Env     string
+	Debug   bool
+	Project string
+	AppName string
 }
