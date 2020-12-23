@@ -16,6 +16,9 @@ Usage: $(basename $0)
   -a app (default: squaaat-api)
   -e environment (default: environment)
   [-h help]
+
+Example:
+  ./scripts/secret.update.sh -r ap-northeast-2 -a squaaat-api -e alpha
 "
 exit 1;
 }

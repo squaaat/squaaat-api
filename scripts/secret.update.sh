@@ -15,6 +15,9 @@ Usage: $(basename $0)
   -a app (default: squaaat-api)
   -e stage (default: alpha)
   [-h help]
+
+Example:
+  ./scripts/secret.update.sh -r ap-northeast-2 -a squaaat-api -e alpha
 "
 exit 1;
 }
