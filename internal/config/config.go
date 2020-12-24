@@ -44,7 +44,6 @@ func MustInit() {
 	Version = viper.GetString("version")
 	App = newAppConfig()
 	ServerHTTP = newServerHTTPConfig()
-	Sentry = newSentryConfig()
 	ServiceDB = newServiceDBConfig()
 }
 
@@ -52,7 +51,6 @@ var (
 	Version    string
 	App        *AppConfig
 	ServerHTTP *ServerHTTPConfig
-	Sentry     *SentryConfig
 	ServiceDB  *ServiceDBConfig
 )
 
@@ -71,14 +69,6 @@ func newServiceDBConfig() *ServiceDBConfig {
 		Schema:   viper.GetString("env.service_db.schema"),
 		Username: viper.GetString("env.service_db.username"),
 		Password: viper.GetString("env.service_db.password"),
-	}
-}
-
-func newSentryConfig() *SentryConfig {
-	return &SentryConfig{
-		Enabled:      viper.GetBool("env.sentry.enabled"),
-		DSN:          viper.GetString("env.sentry.dsn"),
-		FlushTimeout: viper.GetDuration("env.sentry.flush_timeout"),
 	}
 }
 
@@ -103,12 +93,6 @@ type ServiceDBConfig struct {
 	Schema   string
 	Username string
 	Password string
-}
-
-type SentryConfig struct {
-	Enabled      bool
-	DSN          string
-	FlushTimeout time.Duration
 }
 
 type AppConfig struct {
