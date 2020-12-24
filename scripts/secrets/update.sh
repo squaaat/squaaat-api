@@ -9,15 +9,15 @@ environment=""
 
 usage() {
   echo "
-Description: Create AWS System Store Manager Parameter
+Description: Update AWS System Store Manager Parameter
 Usage: $(basename $0)
   -r region (default: ap-northeast-2)
   -a app (default: squaaat-api)
-  -e stage (default: alpha)
+  -e environment (default: alpha)
   [-h help]
 
 Example:
-  ./scripts/secret.update.sh -r ap-northeast-2 -a squaaat-api -e alpha
+  ./scripts/secrets/update.sh -r ap-northeast-2 -a squaaat-api -e alpha
 "
 exit 1;
 }

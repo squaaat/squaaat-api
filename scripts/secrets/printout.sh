@@ -7,18 +7,17 @@ project="squaaat"
 app=""
 environment="alpha"
 
-
 usage() {
   echo "
 Description: Printout AWS System Store Manager Parameter
 Usage: $(basename $0)
   -r region (default: ap-northeast-2)
   -a app (default: squaaat-api)
-  -e environment (default: environment)
+  -e environment (default: alpha)
   [-h help]
 
 Example:
-  ./scripts/secret.update.sh -r ap-northeast-2 -a squaaat-api -e alpha
+  ./scripts/secrets/printout.sh -r ap-northeast-2 -a squaaat-api -e alpha
 "
 exit 1;
 }
