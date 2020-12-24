@@ -11,5 +11,3 @@ func StartGORMInitialize() {
 }
 func StartGORMGenerate() {
 	dbClient := db.New(config.ServiceDB)
-	dbClient.DB.AutoMigrate()
-}

@@ -80,3 +80,7 @@ func New(cfg *config.ServiceDBConfig) *Client {
 		Config: cfg,
 	}
 }
+
+func (c *Client) Migration() {
+
+}
