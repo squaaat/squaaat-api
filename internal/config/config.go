@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"os"
 	"strings"
 	"time"
 
@@ -18,8 +17,7 @@ const (
 	APP     = "squaaat-api"
 )
 
-func MustInit() {
-	e := os.Getenv("SQ_ENV")
+func MustInit(e string) {
 
 	sess, err := session.NewSessionWithOptions(session.Options{
 		SharedConfigState: session.SharedConfigEnable,
