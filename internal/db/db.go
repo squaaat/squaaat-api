@@ -20,7 +20,7 @@ type Client struct {
 	DB        *gorm.DB
 }
 
-func New(cfg *config.ServiceDBConfig, appcfg *config.AppConfig) *Client {
+func New(cfg *config.ServiceDBConfig, appcfg *config.AppConfig) (*Client, error) {
 	dsn := fmt.Sprintf(
 		"%s:%s@tcp(%s:%s)"+
 			"/%s"+
@@ -45,8 +45,7 @@ func New(cfg *config.ServiceDBConfig, appcfg *config.AppConfig) *Client {
 		},
 	)
 	if err != nil {
-		err = errors.WithStack(err)
-		log.Fatal().Err(err).Send()
+		return nil, err
 	}
 	sqlDB, err := db.DB()
 	sqlDB.SetMaxIdleConns(1)
@@ -57,7 +56,7 @@ func New(cfg *config.ServiceDBConfig, appcfg *config.AppConfig) *Client {
 		DB:        db,
 		Config:    cfg,
 		AppConfig: appcfg,
-	}
+	}, nil
 }
 
 func Initialize(cfg *config.ServiceDBConfig) {
@@ -80,6 +79,7 @@ func Initialize(cfg *config.ServiceDBConfig) {
 	if err != nil {
 		panic(err)
 	}
+
 }
 
 func (c *Client) Clean() {
