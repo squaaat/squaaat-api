@@ -10,7 +10,7 @@ import (
 
 func newHTTPCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use: "http",
+		Use:   "http",
 		Short: "about squaaat-api http server",
 		Run: func(cmd *cobra.Command, _ []string) {
 			cmd.Help()
@@ -23,7 +23,7 @@ func newHTTPCommand() *cobra.Command {
 
 func newHTTPStartCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use: "start",
+		Use:   "start",
 		Short: "run http application",
 	}
 	c.Flags().StringP(ArgEnv, ArgEnvShort, ArgEnvDefault, "set environment to run http server")
@@ -41,7 +41,6 @@ func newHTTPStartCommand() *cobra.Command {
 	return c
 }
 
-
 type Options struct {
 	Env string
 }
@@ -50,4 +49,3 @@ func runHTTPServer(o *Options) {
 	config.MustInit(o.Env)
 	app.StartHTTP()
 }
-

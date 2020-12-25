@@ -15,13 +15,81 @@ import (
 )
 
 type Client struct {
-	Config *config.ServiceDBConfig
-	DB *gorm.DB
+	AppConfig *config.AppConfig
+	Config    *config.ServiceDBConfig
+	DB        *gorm.DB
 }
 
-func (c *Client) Initialize() {
+func New(cfg *config.ServiceDBConfig, appcfg *config.AppConfig) *Client {
 	dsn := fmt.Sprintf(
-		"%s:%s@tcp(%s:%s)/" +
+		"%s:%s@tcp(%s:%s)"+
+			"/%s"+
+			"?charset=utf8mb4&parseTime=True&loc=Local",
+		cfg.Username,
+		cfg.Password,
+		cfg.Host,
+		cfg.Port,
+		cfg.Schema,
+	)
+
+	db, err := gorm.Open(
+		mysql.New(mysql.Config{
+			DSN:        dsn,
+			DriverName: cfg.Dialect,
+		}),
+		&gorm.Config{
+			NamingStrategy: schema.NamingStrategy{
+				TablePrefix:   "sq_", // table name prefix, table for `User` would be `t_users`
+				SingularTable: true,  // use singular table name, table for `User` would be `user` with this option enabled
+			},
+		},
+	)
+	if err != nil {
+		err = errors.WithStack(err)
+		log.Fatal().Err(err).Send()
+	}
+	sqlDB, err := db.DB()
+	sqlDB.SetMaxIdleConns(1)
+	sqlDB.SetMaxOpenConns(10)
+	sqlDB.SetConnMaxLifetime(time.Second)
+
+	return &Client{
+		DB:        db,
+		Config:    cfg,
+		AppConfig: appcfg,
+	}
+}
+
+func Initialize(cfg *config.ServiceDBConfig) {
+	dsn := fmt.Sprintf(
+		"%s:%s@tcp(%s:%s)/"+
+			"?charset=utf8mb4&parseTime=True&loc=Local",
+		cfg.Username,
+		cfg.Password,
+		cfg.Host,
+		cfg.Port,
+	)
+
+	db, err := sql.Open(cfg.Dialect, dsn)
+	if err != nil {
+		panic(err)
+	}
+	defer db.Close()
+
+	_, err = db.Exec(fmt.Sprintf("CREATE DATABASE %s CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;", cfg.Schema))
+	if err != nil {
+		panic(err)
+	}
+}
+
+func (c *Client) Clean() {
+	if c.AppConfig.Env != "alpha" {
+		err := errors.New("Clean command only accept 'alpha' env")
+		log.Fatal().Err(err).Send()
+	}
+
+	dsn := fmt.Sprintf(
+		"%s:%s@tcp(%s:%s)/"+
 			"?charset=utf8mb4&parseTime=True&loc=Local",
 		c.Config.Username,
 		c.Config.Password,
@@ -35,52 +103,9 @@ func (c *Client) Initialize() {
 	}
 	defer db.Close()
 
-	_,err = db.Exec(fmt.Sprintf("CREATE DATABASE %s CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;", c.Config.Schema))
+	_, err = db.Exec(fmt.Sprintf("DROP DATABASE %s;", c.Config.Schema))
 	if err != nil {
 		panic(err)
 	}
-}
-
-func New(cfg *config.ServiceDBConfig) *Client {
-	dsn := fmt.Sprintf(
-		"%s:%s@tcp(%s:%s)" +
-			"/%s" +
-			"?charset=utf8mb4&parseTime=True&loc=Local",
-		cfg.Username,
-		cfg.Password,
-		cfg.Host,
-		cfg.Port,
-		cfg.Schema,
-	)
-
-	db, err := gorm.Open(
-		mysql.New(mysql.Config{
-			DSN: dsn,
-			DriverName: cfg.Dialect,
-		}),
-		&gorm.Config{
-			NamingStrategy: schema.NamingStrategy{
-				TablePrefix: "sq_",   // table name prefix, table for `User` would be `t_users`
-				SingularTable: true, // use singular table name, table for `User` would be `user` with this option enabled
-			},
-		},
-	)
-	if err != nil {
-		fmt.Println()
-		err = errors.WithStack(err)
-		log.Fatal().Err(err).Send()
-	}
-	sqlDB, err := db.DB()
-	sqlDB.SetMaxIdleConns(1)
-	sqlDB.SetMaxOpenConns(10)
-	sqlDB.SetConnMaxLifetime(time.Second)
-
-	return &Client{
-		DB: db,
-		Config: cfg,
-	}
-}
-
-func (c *Client) Migration() {
 
 }

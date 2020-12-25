@@ -5,11 +5,10 @@ import (
 )
 
 const (
-	ArgEnv      = "environment"
-	ArgEnvShort = "e"
+	ArgEnv        = "environment"
+	ArgEnvShort   = "e"
 	ArgEnvDefault = "alpha"
 )
-
 
 func Start() {
 	c := newCliCmd()

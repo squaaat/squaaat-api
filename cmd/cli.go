@@ -6,7 +6,7 @@ import (
 
 func newCliCmd() *cobra.Command {
 	return &cobra.Command{
-		Use: "sq",
+		Use:   "sq",
 		Short: "squaaat-api application",
 		Run: func(cmd *cobra.Command, _ []string) {
 			cmd.Help()

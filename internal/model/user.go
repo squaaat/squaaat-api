@@ -14,10 +14,10 @@ type User struct {
 type UserDevice struct {
 	ID int64 `gorm:"primaryKey;autoIncrement"`
 
-	User User
-	Device string
-	UserAgent string
-	Platform string
+	User          User
+	Device        string
+	UserAgent     string
+	Platform      string
 	ClientVersion string
-	DeviceToken string
+	DeviceToken   string
 }

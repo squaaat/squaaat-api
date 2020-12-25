@@ -10,21 +10,21 @@ import (
 
 func newGormCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use: "gorm",
+		Use:   "gorm",
 		Short: "squaaat-api cli gorm scripts",
 		Run: func(cmd *cobra.Command, _ []string) {
 			cmd.Help()
 		},
 	}
-	c.AddCommand(newGormGenerateCommand())
-	c.AddCommand(newGormInitializeCommand())
+	c.AddCommand(newGormClean())
+	c.AddCommand(newGormInit())
 
 	return c
 }
 
-func newGormInitializeCommand() *cobra.Command {
+func newGormInit() *cobra.Command {
 	c := &cobra.Command{
-		Use: "init",
+		Use:   "init",
 		Short: "create schema for develop",
 	}
 	c.Flags().StringP(ArgEnv, ArgEnvShort, ArgEnvDefault, "set environment to run http server")
@@ -34,7 +34,7 @@ func newGormInitializeCommand() *cobra.Command {
 			log.Fatal().Err(err).Send()
 		}
 
-		runGormInitialize(&Options{
+		runGormInit(&Options{
 			Env: env,
 		})
 	}
@@ -42,10 +42,10 @@ func newGormInitializeCommand() *cobra.Command {
 	return c
 }
 
-func newGormGenerateCommand() *cobra.Command {
+func newGormClean() *cobra.Command {
 	c := &cobra.Command{
-		Use: "generate",
-		Short: "re-create schema for develop",
+		Use:   "clean",
+		Short: "remove schema(db)",
 	}
 	c.Flags().StringP(ArgEnv, ArgEnvShort, ArgEnvDefault, "set environment to run http server")
 	c.Run = func(cmd *cobra.Command, _ []string) {
@@ -54,7 +54,7 @@ func newGormGenerateCommand() *cobra.Command {
 			log.Fatal().Err(err).Send()
 		}
 
-		runGormGenerator(&Options{
+		runGormClean(&Options{
 			Env: env,
 		})
 	}
@@ -62,12 +62,12 @@ func newGormGenerateCommand() *cobra.Command {
 	return c
 }
 
-func runGormInitialize(o *Options) {
+func runGormInit(o *Options) {
 	config.MustInit(o.Env)
-	app.StartGORMInitialize()
+	app.StartGORMInit()
 }
 
-func runGormGenerator(o *Options) {
+func runGormClean(o *Options) {
 	config.MustInit(o.Env)
-	app.StartGORMGenerate()
+	app.StartGORMClean()
 }
