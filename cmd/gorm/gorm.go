@@ -10,7 +10,6 @@ import (
 	"time"
 )
 
-// -------- gorm ------------------------
 
 const (
 	ArgEnv        = "environment"
@@ -21,6 +20,7 @@ const (
 	ArgVersionShort   = "v"
 )
 
+// -------- gorm ------------------------
 func New() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "gorm",
@@ -78,7 +78,6 @@ func newGormClean() *cobra.Command {
 }
 
 // -------- gorm migrate ------------------------
-
 func newGormMigrate() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "migrate",

@@ -3,6 +3,9 @@ package db
 import (
 	"database/sql"
 	"fmt"
+	gormLogger "gorm.io/gorm/logger"
+	"os"
+	baseLog "log"
 	"time"
 
 	"github.com/pkg/errors"
@@ -32,6 +35,20 @@ func New(cfg *config.ServiceDBConfig, appcfg *config.AppConfig) (*Client, error)
 		cfg.Schema,
 	)
 
+	var defaultLogger gormLogger.Interface
+	if appcfg.Env == "alpha" {
+		defaultLogger = gormLogger.New(
+			baseLog.New(os.Stdout, "\r\n", baseLog.LstdFlags),
+			gormLogger.Config{
+				SlowThreshold: time.Second,   // Slow SQL threshold
+				LogLevel:      gormLogger.Info, // Log level
+				Colorful:      true,         // Disable color
+			},
+		)
+	} else {
+		defaultLogger = gormLogger.Default
+	}
+
 	db, err := gorm.Open(
 		mysql.New(mysql.Config{
 			DSN:        dsn,
@@ -42,6 +59,7 @@ func New(cfg *config.ServiceDBConfig, appcfg *config.AppConfig) (*Client, error)
 				TablePrefix:   "sq_", // table name prefix, table for `User` would be `t_users`
 				SingularTable: true,  // use singular table name, table for `User` would be `user` with this option enabled
 			},
+			Logger: defaultLogger,
 		},
 	)
 	if err != nil {

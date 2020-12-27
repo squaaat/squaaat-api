@@ -3,7 +3,8 @@ module github.com/squaaat/squaaat-api
 go 1.14
 
 require (
-	github.com/andybalholm/brotli v1.0.1 // indirect
+	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
+	github.com/arsmn/fiber-swagger/v2 v2.3.0
 	github.com/aws/aws-sdk-go v1.36.14
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/go-gormigrate/gormigrate/v2 v2.0.0
@@ -19,10 +20,11 @@ require (
 	github.com/spf13/cobra v1.1.1
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/viper v1.7.1
+	github.com/swaggo/swag v1.7.0
+	golang.org/x/net v0.0.0-20201224014010-6772e930b67b // indirect
 	golang.org/x/sys v0.0.0-20201223074533-0d417f636930 // indirect
-	golang.org/x/text v0.3.4 // indirect
+	golang.org/x/tools v0.0.0-20201226215659-b1c90890d22a // indirect
 	gopkg.in/ini.v1 v1.62.0 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gorm.io/driver/mysql v1.0.3
 	gorm.io/gorm v1.20.9
 )

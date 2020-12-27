@@ -1,5 +1,7 @@
 # squaaat-api
 
+# swagger
+
 
 # cli
 ### gorm

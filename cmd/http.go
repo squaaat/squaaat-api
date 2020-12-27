@@ -3,9 +3,10 @@ package cmd
 import (
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
-
 	"github.com/squaaat/squaaat-api/internal/app"
 	"github.com/squaaat/squaaat-api/internal/config"
+	serverhttp "github.com/squaaat/squaaat-api/internal/server/http"
+	"net"
 )
 
 func newHTTPCommand() *cobra.Command {
@@ -33,19 +34,15 @@ func newHTTPStartCommand() *cobra.Command {
 			log.Fatal().Err(err).Send()
 		}
 
-		runHTTPServer(&Options{
-			Env: env,
-		})
+		config.MustInit(env)
+		app := app.New()
+		httpServer := serverhttp.New(app)
+
+		host := net.JoinHostPort("0.0.0.0", config.ServerHTTP.Port)
+		if err := httpServer.HTTP.Listen(host); err != nil {
+			log.Fatal().Msgf("%v", err)
+		}
 	}
 
 	return c
-}
-
-type Options struct {
-	Env string
-}
-
-func runHTTPServer(o *Options) {
-	config.MustInit(o.Env)
-	app.StartHTTP()
 }
