@@ -59,7 +59,7 @@ func New(cfg *config.ServiceDBConfig, appcfg *config.AppConfig) (*Client, error)
 	}, nil
 }
 
-func Initialize(cfg *config.ServiceDBConfig) {
+func Initialize(cfg *config.ServiceDBConfig) error {
 	dsn := fmt.Sprintf(
 		"%s:%s@tcp(%s:%s)/"+
 			"?charset=utf8mb4&parseTime=True&loc=Local",
@@ -71,14 +71,15 @@ func Initialize(cfg *config.ServiceDBConfig) {
 
 	db, err := sql.Open(cfg.Dialect, dsn)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	defer db.Close()
 
 	_, err = db.Exec(fmt.Sprintf("CREATE DATABASE %s CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;", cfg.Schema))
 	if err != nil {
-		panic(err)
+		return err
 	}
+	return nil
 }
 
 func (c *Client) Clean() {

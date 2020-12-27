@@ -1,23 +1,33 @@
 package model
 
-import "time"
+import (
+	"time"
+)
 
 type User struct {
 	ID int64 `gorm:"primaryKey;autoIncrement"`
 
-	CreatedAt time.Time
 	CreatedBy int64
-	UpdatedAt time.Time
+	CreatedAt time.Time
 	UpdatedBy int64
+	UpdatedAt time.Time
+	DeletedAt time.Time `gorm:"index"`
 }
 
 type UserDevice struct {
 	ID int64 `gorm:"primaryKey;autoIncrement"`
 
-	User          User
+	UserID int64
+	User          User `gorm:"foreignKey:UserID"`
 	Device        string
 	UserAgent     string
 	Platform      string
 	ClientVersion string
 	DeviceToken   string
+
+	CreatedBy int64
+	CreatedAt time.Time
+	UpdatedBy int64
+	UpdatedAt time.Time
+	DeletedAt time.Time `gorm:"index"`
 }

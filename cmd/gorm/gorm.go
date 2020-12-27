@@ -49,7 +49,10 @@ func newGormInit() *cobra.Command {
 		}
 
 		config.MustInit(env)
-		db.Initialize(config.ServiceDB)
+		err = db.Initialize(config.ServiceDB)
+		if err != nil {
+			log.Fatal().Err(err).Send()
+		}
 	}
 
 	return c
