@@ -23,3 +23,4 @@ go run main.go gorm migrate create -v (default: yyyymmddHHMM)
 ``` go
 go run main.go gorm migrate sync
 ``` 
+

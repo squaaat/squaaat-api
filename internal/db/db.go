@@ -79,7 +79,6 @@ func Initialize(cfg *config.ServiceDBConfig) {
 	if err != nil {
 		panic(err)
 	}
-
 }
 
 func (c *Client) Clean() {
