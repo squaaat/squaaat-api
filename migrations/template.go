@@ -2,7 +2,6 @@ package migrations
 
 import "fmt"
 
-
 func versionedTemplate(v string) string {
 	return fmt.Sprintf(template,
 		v,
@@ -11,6 +10,7 @@ func versionedTemplate(v string) string {
 		v,
 	)
 }
+
 const template = `package migrations
 
 import (

@@ -13,7 +13,7 @@ import (
 )
 
 type Syncker struct {
-	App *app.Application
+	App          *app.Application
 	GormMigrator *gormigrate.Gormigrate
 }
 
@@ -77,7 +77,7 @@ func (s *Syncker) load() []*gormigrate.Migration {
 		pwd,
 		v,
 		pwd,
-		)
+	)
 }
 
 func (s *Syncker) load() []*gormigrate.Migration {

@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 	gormLogger "gorm.io/gorm/logger"
-	"os"
 	baseLog "log"
+	"os"
 	"time"
 
 	"github.com/pkg/errors"
@@ -40,9 +40,9 @@ func New(cfg *config.ServiceDBConfig, appcfg *config.AppConfig) (*Client, error)
 		defaultLogger = gormLogger.New(
 			baseLog.New(os.Stdout, "\r\n", baseLog.LstdFlags),
 			gormLogger.Config{
-				SlowThreshold: time.Second,   // Slow SQL threshold
+				SlowThreshold: time.Second,     // Slow SQL threshold
 				LogLevel:      gormLogger.Info, // Log level
-				Colorful:      true,         // Disable color
+				Colorful:      true,            // Disable color
 			},
 		)
 	} else {

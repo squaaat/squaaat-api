@@ -6,10 +6,15 @@ require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/arsmn/fiber-swagger/v2 v2.3.0
 	github.com/aws/aws-sdk-go v1.36.14
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/go-gormigrate/gormigrate/v2 v2.0.0
+	github.com/go-openapi/validate v0.20.0 // indirect
+	github.com/go-swagger/go-swagger v0.25.0 // indirect
 	github.com/gofiber/fiber/v2 v2.3.0
+	github.com/gorilla/handlers v1.5.1 // indirect
 	github.com/klauspost/compress v1.11.4 // indirect
+	github.com/lestrrat-go/jwx v1.0.6
 	github.com/magiconair/properties v1.8.4 // indirect
 	github.com/mitchellh/mapstructure v1.4.0 // indirect
 	github.com/pelletier/go-toml v1.8.1 // indirect
@@ -23,7 +28,7 @@ require (
 	github.com/swaggo/swag v1.7.0
 	golang.org/x/net v0.0.0-20201224014010-6772e930b67b // indirect
 	golang.org/x/sys v0.0.0-20201223074533-0d417f636930 // indirect
-	golang.org/x/tools v0.0.0-20201226215659-b1c90890d22a // indirect
+	golang.org/x/tools v0.0.0-20201228175227-13ff2212a54f // indirect
 	gopkg.in/ini.v1 v1.62.0 // indirect
 	gorm.io/driver/mysql v1.0.3
 	gorm.io/gorm v1.20.9

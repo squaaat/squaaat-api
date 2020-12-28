@@ -10,10 +10,9 @@ import (
 )
 
 type HTTPApplication struct {
-	App *app.Application
+	App  *app.Application
 	HTTP *fiber.App
 }
-
 
 func New(a *app.Application) *HTTPApplication {
 	httpApp := &HTTPApplication{}
@@ -33,4 +32,3 @@ func New(a *app.Application) *HTTPApplication {
 
 	return httpApp
 }
-

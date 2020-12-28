@@ -10,14 +10,13 @@ import (
 	"time"
 )
 
-
 const (
 	ArgEnv        = "environment"
 	ArgEnvShort   = "e"
 	ArgEnvDefault = "alpha"
 
-	ArgVersion        = "version"
-	ArgVersionShort   = "v"
+	ArgVersion      = "version"
+	ArgVersionShort = "v"
 )
 
 // -------- gorm ------------------------
