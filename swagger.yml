@@ -1,0 +1,29 @@
+info: {}
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: |-
+        This will show all available pets by default.
+        You can get the pets that are out of stock
+      operationId: logins
+      produces:
+      - application/json
+      responses:
+        "204":
+          $ref: '#/responses/someResponse'
+        "400":
+          $ref: '#/responses/validationError'
+        "500":
+          $ref: '#/responses/serverError'
+        default:
+          $ref: '#/responses/genericError'
+      schemes:
+      - http
+      - https
+      summary: Lists pets filtered by some parameters.
+      tags:
+      - webview
+      - client
+swagger: "2.0"

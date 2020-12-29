@@ -71,11 +71,17 @@ func newServiceDBConfig() *ServiceDBConfig {
 }
 
 func newAppConfig() *AppConfig {
+	pemKeyLines := strings.Split(viper.GetString("env.app.rsa_private_pem"), "\\n")
+	for i, line := range pemKeyLines {
+		pemKeyLines[i] = strings.TrimSpace(line)
+	}
+
 	return &AppConfig{
-		Env:     viper.GetString("env.app.env"),
-		Debug:   viper.GetBool("env.app.debug"),
-		Project: viper.GetString("env.app.project"),
-		AppName: viper.GetString("env.app.app_name"),
+		Env:           viper.GetString("env.app.env"),
+		Debug:         viper.GetBool("env.app.debug"),
+		Project:       viper.GetString("env.app.project"),
+		AppName:       viper.GetString("env.app.app_name"),
+		RSAPrivatePem: strings.Join(pemKeyLines, "\n"),
 	}
 }
 
@@ -94,8 +100,9 @@ type ServiceDBConfig struct {
 }
 
 type AppConfig struct {
-	Env     string
-	Debug   bool
-	Project string
-	AppName string
+	Env           string
+	Debug         bool
+	Project       string
+	AppName       string
+	RSAPrivatePem string
 }

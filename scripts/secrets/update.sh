@@ -2,10 +2,11 @@
 
 DD=/squaaat/squaaat-api/alpha/env
 
-region=""
+region="ap-northeast-2"
 project="squaaat"
-app=""
-environment=""
+app="squaaat-api"
+environment="alpha"
+inDir="./"
 
 usage() {
   echo "
@@ -14,6 +15,7 @@ Usage: $(basename $0)
   -r region (default: ap-northeast-2)
   -a app (default: squaaat-api)
   -e environment (default: alpha)
+  -i inDir (default: ./)
   [-h help]
 
 Example:
@@ -28,6 +30,7 @@ while getopts 'r:a:e:h' optname; do
     r) region=${OPTARG};;
     a) app=${OPTARG};;
     e) environment=${OPTARG};;
+    i) inDir=${OPTARG};;
     *) usage;;
   esac
 done
@@ -37,11 +40,12 @@ done
 
 echo "/${project}/${app}/${environment}/env"
 
-YML="$(cat ./env.${environment}.yml)"
+YML="$(cat ${inDir}./env.${environment}.yml)"
 echo "${YML}"
 
 echo "- Output -------------------------------"
 
+echo "${inDir}./env.${environment}.yml)"
 aws ssm put-parameter \
   --region ${region} \
   --name "/${project}/${app}/${environment}/env" \

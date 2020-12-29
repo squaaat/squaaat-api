@@ -6,6 +6,7 @@ region=""
 project="squaaat"
 app=""
 environment="alpha"
+outDir="./"
 
 usage() {
   echo "
@@ -14,6 +15,7 @@ Usage: $(basename $0)
   -r region (default: ap-northeast-2)
   -a app (default: squaaat-api)
   -e environment (default: alpha)
+  -o outDir (default: ./)
   [-h help]
 
 Example:
@@ -22,12 +24,13 @@ Example:
 exit 1;
 }
 
-while getopts 'r:a:e:h' optname; do
+while getopts 'r:a:e:o:h' optname; do
   case "${optname}" in
     h) usage;;
     r) region=${OPTARG};;
     a) app=${OPTARG};;
     e) environment=${OPTARG};;
+    o) outDir=${OPTARG};;
     *) usage;;
   esac
 done
@@ -44,4 +47,5 @@ aws ssm get-parameter \
 )
 
 echo "${YML}"
-echo "${YML}" > env.${environment}.yml
+echo "${YML}" > ${outDir}./env.${environment}.yml
+echo "${outDir}./env.${environment}.yml)"

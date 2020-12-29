@@ -16,7 +16,7 @@ type User struct {
 	DeletedAt gorm.DeletedAt `gorm:"index"`
 }
 
-type UserSessionToken struct {
+type UserDevice struct {
 	ID int64 `gorm:"primaryKey;autoIncrement"`
 
 	UserID int64
@@ -27,9 +27,6 @@ type UserSessionToken struct {
 	UserAgent     string
 	Platform      string
 	ClientVersion string
-
-	AuthToken string
-	RSAPem    string `gorm:"size:3072"`
 
 	CreatedBy int64
 	CreatedAt time.Time `gorm:"type:timestamp;default:current_timestamp"`

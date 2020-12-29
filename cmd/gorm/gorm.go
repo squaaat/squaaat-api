@@ -29,15 +29,45 @@ func New() *cobra.Command {
 		},
 	}
 	c.AddCommand(newGormClean())
-	c.AddCommand(newGormInit())
+	c.AddCommand(newGormCreate())
+	c.AddCommand(newGormReCreate())
 	c.AddCommand(newGormMigrate())
 
 	return c
 }
 
-func newGormInit() *cobra.Command {
+func newGormReCreate() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "init",
+		Use:   "re-create",
+		Short: "create schema for develop",
+	}
+	c.Flags().StringP(ArgEnv, ArgEnvShort, ArgEnvDefault, "set environment to run gorm cli")
+	c.Run = func(cmd *cobra.Command, _ []string) {
+		env, err := cmd.Flags().GetString(ArgEnv)
+		if err != nil {
+			log.Fatal().Err(err).Send()
+		}
+
+		config.MustInit(env)
+		a := app.New()
+		a.ServiceDB.Clean()
+
+		err = db.Initialize(config.ServiceDB)
+
+		m := migrations.New(a)
+		m.Sync()
+
+		if err != nil {
+			log.Fatal().Err(err).Send()
+		}
+	}
+
+	return c
+}
+
+func newGormCreate() *cobra.Command {
+	c := &cobra.Command{
+		Use:   "create",
 		Short: "create schema for develop",
 	}
 	c.Flags().StringP(ArgEnv, ArgEnvShort, ArgEnvDefault, "set environment to run gorm cli")
@@ -49,6 +79,11 @@ func newGormInit() *cobra.Command {
 
 		config.MustInit(env)
 		err = db.Initialize(config.ServiceDB)
+
+		a := app.New()
+		m := migrations.New(a)
+		m.Sync()
+
 		if err != nil {
 			log.Fatal().Err(err).Send()
 		}
