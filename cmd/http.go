@@ -1,11 +1,14 @@
 package cmd
 
 import (
+	swagger "github.com/arsmn/fiber-swagger/v2"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/squaaat/squaaat-api/internal/app"
 	"github.com/squaaat/squaaat-api/internal/config"
 	serverhttp "github.com/squaaat/squaaat-api/internal/server/http"
+	"github.com/squaaat/squaaat-api/internal/server/http/v1/auth"
+
 	"net"
 )
 
@@ -36,10 +39,13 @@ func newHTTPStartCommand() *cobra.Command {
 
 		config.MustInit(env)
 		app := app.New()
-		httpServer := serverhttp.New(app)
+		http := serverhttp.New()
+
+		http.Post("/api/v1/auth/login", auth.PostAuthLogin(app))
+		http.Get("/swagger/*", swagger.Handler)
 
 		host := net.JoinHostPort("0.0.0.0", config.ServerHTTP.Port)
-		if err := httpServer.HTTP.Listen(host); err != nil {
+		if err := http.Listen(host); err != nil {
 			log.Fatal().Msgf("%v", err)
 		}
 	}

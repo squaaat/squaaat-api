@@ -2,10 +2,8 @@ package serverhttp
 
 import (
 	"fmt"
-	"github.com/arsmn/fiber-swagger/v2"
+
 	"github.com/gofiber/fiber/v2"
-	"github.com/squaaat/squaaat-api/internal/app"
-	"github.com/squaaat/squaaat-api/internal/server/http/v1/auth"
 )
 
 // SQUAAAT application http api server that squaaat-api
@@ -28,26 +26,15 @@ import (
 //
 // swagger:meta
 
-type HTTPApplication struct {
-	App  *app.Application
-	HTTP *fiber.App
-}
-
-func New(a *app.Application) *HTTPApplication {
-	httpApp := &HTTPApplication{}
+func New() *fiber.App {
 	f := fiber.New()
-	httpApp.App = a
-	httpApp.HTTP = f
 
-	httpApp.HTTP.Use(func(ctx *fiber.Ctx) error {
+	f.Use(func(ctx *fiber.Ctx) error {
 		fmt.Println(ctx.Path())
 		fmt.Println(string(ctx.Body()))
 		return ctx.Next()
 	})
 
-	httpApp.HTTP.Post("/api/v1/auth/login", auth.PostAuthLogin(a))
 
-	httpApp.HTTP.Get("/swagger/*", swagger.Handler)
-
-	return httpApp
+	return f
 }
