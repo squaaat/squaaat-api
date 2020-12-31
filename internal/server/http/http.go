@@ -35,6 +35,5 @@ func New() *fiber.App {
 		return ctx.Next()
 	})
 
-
 	return f
 }
