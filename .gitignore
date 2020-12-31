@@ -18,3 +18,7 @@
 
 env.**
 .envrc
+
+
+.terraform
+.terraform.lock.hcl

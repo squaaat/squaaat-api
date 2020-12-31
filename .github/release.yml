@@ -1,0 +1,71 @@
+name: deploy squaaat-api
+
+env:
+  SQ_ENV: "alpha"
+  SQ_CICD: "false"
+
+on:
+  push:
+    paths-ignore:
+      - "README.md"
+      - "karrier.yml"
+      - ".env.example"
+      - ".envrc.example"
+      - ".gitignore"
+      - "docker-compose.yml"
+      - "scripts/**"
+      - "test/**"
+    branches:
+      - master
+
+jobs:
+  build-and-push:
+    runs-on: [self-hosted, Linux, X64]
+
+    steps:
+      - name: Configure AWS credentials for AWS prod
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.ORG_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.ORG_AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - uses: actions/checkout@v2
+
+      - name: Get the version
+        id: version
+        run: echo ::set-output name=version::$GITHUB_SHA
+
+      - uses: actions/setup-go@v1
+        with:
+          go-version: "1.14"
+
+      - name: Run go mod download
+        env:
+          GO111MODULE: on
+          GOPRIVATE: github.com/daangn
+        run : |
+          go mod download
+
+      - name: Run gofmt
+        run: |
+          test -z $(gofmt -l .)
+
+      - name: Run go vet
+        run : |
+          go vet ./...
+
+      - name: Run go test
+        run: |
+          go test ./... -v
+
+      - uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          channel: "#develop"
+          username: "Github Actions"
+          fields: repo,workflow,action,author
+          text: "`Deploy`: [:kr:]<https://argocd-alpha.daangn.dev/applications/search-server-alpha|alpha-kr> [:uk:]<https://argocd-alpha.daangn.dev/applications/search-server-gb-alpha|alpha-uk> || [:kr:]<https://infra-admin.kr.krmt.io/deploy-admin/p03-search-server|prod-kr> [:uk:]<https://infra-admin.kr.krmt.io/deploy-admin/p02-search-server|prod-uk> \n`Image Name`: search-server\n`Image Tag`: ${{ steps.version.outputs.version }}"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
+        if: always() # Pick up events even if the job fails or is canceled.
