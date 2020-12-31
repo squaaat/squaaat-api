@@ -60,13 +60,14 @@ jobs:
         run: |
           go test ./... -v
 
-      - uses: 8398a7/action-slack@v3
+      - name: Slack alert
+        uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
           channel: "#develop"
-          username: "Github Actions"
+          username: "deployer"
           fields: repo,workflow,action,author
-          text: "`Deploy`: [:kr:]<https://argocd-alpha.daangn.dev/applications/search-server-alpha|alpha-kr> [:uk:]<https://argocd-alpha.daangn.dev/applications/search-server-gb-alpha|alpha-uk> || [:kr:]<https://infra-admin.kr.krmt.io/deploy-admin/p03-search-server|prod-kr> [:uk:]<https://infra-admin.kr.krmt.io/deploy-admin/p02-search-server|prod-uk> \n`Image Name`: search-server\n`Image Tag`: ${{ steps.version.outputs.version }}"
+          text: "`Image Tag`: ${{ steps.version.outputs.version }} \n`Deploy URL - alpha`: <https://github.com/squaaat/squaaat-api.git|alpha>"
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
         if: always() # Pick up events even if the job fails or is canceled.
