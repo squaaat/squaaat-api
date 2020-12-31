@@ -4,6 +4,7 @@ env:
   SQ_ENV: "alpha"
   SQ_CICD: "false"
 
+on: [push]
 #on:
 #  push:
 #    paths-ignore:
