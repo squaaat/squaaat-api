@@ -16,7 +16,22 @@ terraform {
   }
 }
 
+data "terraform_remote_state" "common" {
+  backend = "s3"
+
+  config = {
+    bucket  = "squaaat-infrastructure"
+    key     = "terraform/common"
+    region  = "ap-northeast-2"
+    encrypt = true
+  }
+}
+
 provider "aws" {
   region = "ap-northeast-2"
 }
 
+provider "aws" {
+  alias = "us_east_1"
+  region = "us-east-1"
+}

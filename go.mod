@@ -3,8 +3,8 @@ module github.com/squaaat/squaaat-api
 go 1.14
 
 require (
-	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/arsmn/fiber-swagger/v2 v2.3.0
+	github.com/aws/aws-lambda-go v1.22.0
 	github.com/aws/aws-sdk-go v1.36.14
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/go-gormigrate/gormigrate/v2 v2.0.0

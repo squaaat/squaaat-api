@@ -1,6 +1,10 @@
 # squaaat-api
 
 
+# go build
+``` bash
+GOARCH=amd64 GOOS=linux go build -o dist/sq 
+```
 
 # cli
 
