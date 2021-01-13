@@ -9,9 +9,8 @@ resource "aws_lambda_permission" "lambda_permission" {
   principal     = "apigateway.amazonaws.com"
 
   # More: http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-control-access-using-iam-policies-to-invoke-api.html
-//  source_arn = "arn:aws:execute-api:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${aws_api_gateway_rest_api.api.id}/${aws_api_gateway_deployment.deployment.stage_name}/${aws_api_gateway_method.method.http_method}${aws_api_gateway_resource.resource.path}"
-  source_arn = "${aws_api_gateway_rest_api.api.execution_arn}/*/*/*"
-//  source_arn = aws_api_gateway_rest_api.api.execution_arn
+  // source_arn = "arn:aws:execute-api:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${aws_api_gateway_rest_api.api.id}/${aws_api_gateway_deployment.deployment.stage_name}/${aws_api_gateway_method.method.http_method}${aws_api_gateway_resource.resource.path}"
+  source_arn = "${aws_apigatewayv2_api.api.execution_arn}/*/*/${local.proxy}"
 }
 
 resource "aws_lambda_function" "lambda" {
@@ -19,8 +18,8 @@ resource "aws_lambda_function" "lambda" {
   function_name = "${var.meta.team}-${var.meta.service}-${var.meta.env}"
   role          = aws_iam_role.role.arn
   runtime       = var.lambda.runtime
-  memory_size      = var.lambda.memory_size
-  timeout          = var.lambda.timeout
+  memory_size   = var.lambda.memory_size
+  timeout       = var.lambda.timeout
 
   s3_bucket = var.lambda.s3_bucket
   s3_key    = var.lambda.s3_object_key
@@ -90,7 +89,7 @@ POLICY
 }
 
 resource "aws_iam_policy" "policy" {
-  name = "${var.meta.team}-${var.meta.service}-${var.meta.env}"
+  name        = "${var.meta.team}-${var.meta.service}-${var.meta.env}"
   description = "${var.meta.team}-${var.meta.service}-${var.meta.env}"
 
   policy = <<EOF
@@ -117,7 +116,7 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "role_attach" {
-  role = aws_iam_role.role.name
+  role       = aws_iam_role.role.name
   policy_arn = aws_iam_policy.policy.arn
 }
 

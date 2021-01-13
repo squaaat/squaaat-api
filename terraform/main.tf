@@ -46,13 +46,11 @@ output "alpha" {
 }
 
 data "aws_acm_certificate" "alpha_acm" {
-  provider = aws.us_east_1
   domain   = "alpha.squaaat.com"
   statuses = ["ISSUED"]
 }
 
 data "aws_acm_certificate" "prod_acm" {
-  provider = aws.us_east_1
   domain   = "squaaat.com"
   statuses = ["ISSUED"]
 }

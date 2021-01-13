@@ -28,13 +28,13 @@ variable "meta" {
 
 variable "lambda" {
   type = object({
-    version = string
-    handler = string
-    runtime = string
-    memory_size = number
-    concurrent = number
-    timeout = number
-    s3_bucket = string
+    version       = string
+    handler       = string
+    runtime       = string
+    memory_size   = number
+    concurrent    = number
+    timeout       = number
+    s3_bucket     = string
     s3_object_key = string
   })
 }
