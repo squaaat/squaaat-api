@@ -28,7 +28,7 @@ variable "meta" {
 
 variable "lambda" {
   type = object({
-    version       = string
+    environment   = object({})
     handler       = string
     runtime       = string
     memory_size   = number

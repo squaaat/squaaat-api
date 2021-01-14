@@ -8,18 +8,21 @@ import (
 )
 
 type Application struct {
+	Config    *config.Config
 	ServiceDB *db.Client
 }
 
-func New() *Application {
-	a := &Application{}
-	a.ServiceDB = CreateServiceDBClient()
+func New(cfg *config.Config) *Application {
+	a := &Application{
+		Config: cfg,
+	}
+	a.ServiceDB = CreateServiceDBClient(a.Config)
 
 	return a
 }
 
-func CreateServiceDBClient() *db.Client {
-	client, err := db.New(config.ServiceDB, config.App)
+func CreateServiceDBClient(cfg *config.Config) *db.Client {
+	client, err := db.New(db.ParseConfig(cfg))
 	if err != nil {
 		log.Fatal().Err(err).Send()
 	}

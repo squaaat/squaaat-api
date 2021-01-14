@@ -1,12 +1,17 @@
 # squaaat-api
 
 
-# go build
+# cli
+
+### go build & deploy
 ``` bash
 GOARCH=amd64 GOOS=linux go build -o dist/sq 
 ```
 
-# cli
+``` bash
+terraform init ./terraform # if didn't run
+terraform apply ./terraform
+```
 
 
 ### secrets 환경변수

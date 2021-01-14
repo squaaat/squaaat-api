@@ -17,8 +17,7 @@ const (
 	APP     = "squaaat-api"
 )
 
-func MustInit(e string) {
-
+func MustInit(e string, cicd bool) *Config {
 	sess, err := session.NewSessionWithOptions(session.Options{
 		SharedConfigState: session.SharedConfigEnable,
 	})
@@ -39,18 +38,22 @@ func MustInit(e string) {
 	viper.SetConfigType("yaml")
 	viper.ReadConfig(strings.NewReader(value))
 
-	Version = viper.GetString("version")
-	App = newAppConfig()
-	ServerHTTP = newServerHTTPConfig()
-	ServiceDB = newServiceDBConfig()
+	return &Config{
+		Version:    viper.GetString("version"),
+		CICD:       cicd,
+		App:        newAppConfig(),
+		ServerHTTP: newServerHTTPConfig(),
+		ServiceDB:  newServiceDBConfig(),
+	}
 }
 
-var (
+type Config struct {
 	Version    string
+	CICD       bool
 	App        *AppConfig
 	ServerHTTP *ServerHTTPConfig
 	ServiceDB  *ServiceDBConfig
-)
+}
 
 func newServerHTTPConfig() *ServerHTTPConfig {
 	return &ServerHTTPConfig{

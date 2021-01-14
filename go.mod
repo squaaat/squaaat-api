@@ -6,7 +6,7 @@ require (
 	github.com/arsmn/fiber-swagger/v2 v2.3.0
 	github.com/aws/aws-lambda-go v1.22.0
 	github.com/aws/aws-sdk-go v1.36.14
-	github.com/fsnotify/fsnotify v1.4.9 // indirect
+	github.com/awslabs/aws-lambda-go-api-proxy v0.9.0
 	github.com/go-gormigrate/gormigrate/v2 v2.0.0
 	github.com/gofiber/fiber/v2 v2.3.0
 	github.com/klauspost/compress v1.11.4 // indirect
@@ -22,7 +22,6 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/viper v1.7.1
 	github.com/swaggo/swag v1.7.0
-	golang.org/x/crypto v0.0.0-20200709230013-948cd5f35899 // indirect
 	golang.org/x/net v0.0.0-20201224014010-6772e930b67b // indirect
 	golang.org/x/sys v0.0.0-20201223074533-0d417f636930 // indirect
 	golang.org/x/tools v0.0.0-20201228175227-13ff2212a54f // indirect

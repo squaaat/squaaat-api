@@ -3,7 +3,11 @@ package serverhttp
 import (
 	"fmt"
 
+	swagger "github.com/arsmn/fiber-swagger/v2"
 	"github.com/gofiber/fiber/v2"
+
+	"github.com/squaaat/squaaat-api/internal/app"
+	"github.com/squaaat/squaaat-api/internal/service/auth"
 )
 
 // SQUAAAT application http api server that squaaat-api
@@ -26,7 +30,7 @@ import (
 //
 // swagger:meta
 
-func New() *fiber.App {
+func New(a *app.Application) *fiber.App {
 	f := fiber.New()
 
 	f.Use(func(ctx *fiber.Ctx) error {
@@ -34,6 +38,9 @@ func New() *fiber.App {
 		fmt.Println(string(ctx.Body()))
 		return ctx.Next()
 	})
+
+	f.Post("/api/v1/auth/login", auth.PostAuthLogin(a))
+	f.Get("/swagger/*", swagger.Handler)
 
 	return f
 }

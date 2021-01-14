@@ -16,13 +16,16 @@ module "alpha" {
 
   lambda = {
     handler = "sq"
-    version = "v1"
     runtime = "go1.x"
     memory_size = 128
     concurrent = 2
     timeout = 1
     s3_bucket = aws_s3_bucket_object.object.bucket
     s3_object_key = aws_s3_bucket_object.object.key
+    environment = {
+      SQ_ENV = "alpha",
+      SQ_CICD = "false"
+    }
   }
 
   record = {
@@ -61,8 +64,8 @@ data "aws_s3_bucket" "repo" {
 
 data "archive_file" "dist" {
   type        = "zip"
-  source_file  = "${path.cwd}/../dist/sq"
-  output_path = "${path.cwd}/../dist/sq.zip"
+  source_file  = "${path.cwd}/dist/sq"
+  output_path = "${path.cwd}/dist/sq.zip"
 }
 
 resource "aws_s3_bucket_object" "object" {

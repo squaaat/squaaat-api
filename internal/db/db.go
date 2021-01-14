@@ -18,12 +18,33 @@ import (
 )
 
 type Client struct {
-	AppConfig *config.AppConfig
-	Config    *config.ServiceDBConfig
-	DB        *gorm.DB
+	DB     *gorm.DB
+	Config *Config
 }
 
-func New(cfg *config.ServiceDBConfig, appcfg *config.AppConfig) (*Client, error) {
+type Config struct {
+	Env      string
+	Username string
+	Password string
+	Host     string
+	Port     string
+	Schema   string
+	Dialect  string
+}
+
+func ParseConfig(cfg *config.Config) *Config {
+	return &Config{
+		Username: cfg.ServiceDB.Username,
+		Password: cfg.ServiceDB.Password,
+		Host:     cfg.ServiceDB.Host,
+		Port:     cfg.ServiceDB.Port,
+		Schema:   cfg.ServiceDB.Schema,
+		Dialect:  cfg.ServiceDB.Dialect,
+		Env:      cfg.App.Env,
+	}
+}
+
+func New(cfg *Config) (*Client, error) {
 	dsn := fmt.Sprintf(
 		"%s:%s@tcp(%s:%s)"+
 			"/%s"+
@@ -36,7 +57,7 @@ func New(cfg *config.ServiceDBConfig, appcfg *config.AppConfig) (*Client, error)
 	)
 
 	var defaultLogger gormLogger.Interface
-	if appcfg.Env == "alpha" {
+	if cfg.Env == "alpha" {
 		defaultLogger = gormLogger.New(
 			baseLog.New(os.Stdout, "\r\n", baseLog.LstdFlags),
 			gormLogger.Config{
@@ -71,9 +92,7 @@ func New(cfg *config.ServiceDBConfig, appcfg *config.AppConfig) (*Client, error)
 	sqlDB.SetConnMaxLifetime(time.Second)
 
 	return &Client{
-		DB:        db,
-		Config:    cfg,
-		AppConfig: appcfg,
+		DB: db,
 	}, nil
 }
 
@@ -101,7 +120,7 @@ func Initialize(cfg *config.ServiceDBConfig) error {
 }
 
 func (c *Client) Clean() {
-	if c.AppConfig.Env != "alpha" {
+	if c.Config.Env != "alpha" {
 		err := errors.New("Clean command only accept 'alpha' env")
 		log.Fatal().Err(err).Send()
 	}

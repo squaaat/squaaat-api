@@ -7,6 +7,8 @@ import (
 	"github.com/squaaat/squaaat-api/internal/config"
 	"github.com/squaaat/squaaat-api/internal/db"
 	"github.com/squaaat/squaaat-api/migrations"
+	"os"
+	"strconv"
 	"time"
 )
 
@@ -48,11 +50,13 @@ func newGormReCreate() *cobra.Command {
 			log.Fatal().Err(err).Send()
 		}
 
-		config.MustInit(env)
-		a := app.New()
+		sqcicd := os.Getenv("SQ_CICD")
+		cicd, _ := strconv.ParseBool(sqcicd)
+		cfg := config.MustInit(env, cicd)
+		a := app.New(cfg)
 		a.ServiceDB.Clean()
 
-		err = db.Initialize(config.ServiceDB)
+		err = db.Initialize(cfg.ServiceDB)
 
 		m := migrations.New(a)
 		m.Sync()
@@ -77,10 +81,16 @@ func newGormCreate() *cobra.Command {
 			log.Fatal().Err(err).Send()
 		}
 
-		config.MustInit(env)
-		err = db.Initialize(config.ServiceDB)
+		sqcicd := os.Getenv("SQ_CICD")
+		cicd, _ := strconv.ParseBool(sqcicd)
+		cfg := config.MustInit(env, cicd)
 
-		a := app.New()
+		err = db.Initialize(cfg.ServiceDB)
+		if err != nil {
+			log.Fatal().Err(err).Send()
+		}
+
+		a := app.New(cfg)
 		m := migrations.New(a)
 		m.Sync()
 
@@ -103,8 +113,10 @@ func newGormClean() *cobra.Command {
 		if err != nil {
 			log.Fatal().Err(err).Send()
 		}
-		config.MustInit(env)
-		a := app.New()
+		sqcicd := os.Getenv("SQ_CICD")
+		cicd, _ := strconv.ParseBool(sqcicd)
+		cfg := config.MustInit(env, cicd)
+		a := app.New(cfg)
 		a.ServiceDB.Clean()
 	}
 
@@ -140,8 +152,10 @@ func newGormMigrateSync() *cobra.Command {
 			log.Fatal().Err(err).Send()
 		}
 
-		config.MustInit(env)
-		a := app.New()
+		sqcicd := os.Getenv("SQ_CICD")
+		cicd, _ := strconv.ParseBool(sqcicd)
+		cfg := config.MustInit(env, cicd)
+		a := app.New(cfg)
 		m := migrations.New(a)
 		m.Sync()
 	}
@@ -167,8 +181,10 @@ func newGormMigrateCreate() *cobra.Command {
 			log.Fatal().Err(err).Send()
 		}
 
-		config.MustInit(env)
-		a := app.New()
+		sqcicd := os.Getenv("SQ_CICD")
+		cicd, _ := strconv.ParseBool(sqcicd)
+		cfg := config.MustInit(env, cicd)
+		a := app.New(cfg)
 		m := migrations.New(a)
 		m.Create(version)
 	}

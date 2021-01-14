@@ -9,7 +9,6 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"github.com/squaaat/squaaat-api/internal/app"
-	"github.com/squaaat/squaaat-api/internal/config"
 	"github.com/squaaat/squaaat-api/internal/model"
 	"github.com/squaaat/squaaat-api/pkg/rsautil"
 )
@@ -48,7 +47,7 @@ func ParseAuthRequest(ctx *fiber.Ctx) (*LoginRequest, error) {
 	return req, nil
 }
 
-func PostAuthLogin(app *app.Application) fiber.Handler {
+func PostAuthLogin(a *app.Application) fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		req, err := ParseAuthRequest(ctx)
 		if err != nil {
@@ -60,9 +59,9 @@ func PostAuthLogin(app *app.Application) fiber.Handler {
 
 		var userSessionsTokens []model.UserDevice
 		ud := &model.UserDevice{DeviceToken: req.DeviceToken}
-		app.ServiceDB.DB.Find(&userSessionsTokens, ud)
+		a.ServiceDB.DB.Find(&userSessionsTokens, ud)
 		if len(userSessionsTokens) == 0 {
-			tx := app.ServiceDB.DB.Begin()
+			tx := a.ServiceDB.DB.Begin()
 			u := &model.User{}
 
 			r := tx.Create(&u)
@@ -102,7 +101,7 @@ func PostAuthLogin(app *app.Application) fiber.Handler {
 		t.Set(jwt.ExpirationKey, time.Now().Add(3*time.Minute).Unix())
 		t.Set("user_id", 1485)
 
-		privateKey, err := rsautil.ParseRsaPrivateKeyFromPemStr(config.App.RSAPrivatePem)
+		privateKey, err := rsautil.ParseRsaPrivateKeyFromPemStr(a.Config.App.RSAPrivatePem)
 		if err != nil {
 			log.Error().Err(err).Send()
 			return ctx.

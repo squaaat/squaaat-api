@@ -29,6 +29,10 @@ resource "aws_lambda_function" "lambda" {
     subnet_ids         = var.subnet_ids
     security_group_ids = [aws_security_group.sg.id]
   }
+
+  environment {
+    variables = var.lambda.environment
+  }
 }
 
 resource "aws_security_group" "sg" {

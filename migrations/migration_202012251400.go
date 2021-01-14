@@ -18,6 +18,7 @@ func (s *Syncker) migration_202012251400() *gormigrate.Migration {
 				gorm.Model
 				Name string
 			}
+
 			return tx.AutoMigrate(&Person{})
 		},
 		Rollback: func(tx *gorm.DB) error {
